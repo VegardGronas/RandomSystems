@@ -110,7 +110,8 @@ GameObject:
   - component: {fileID: 6585520050820918645}
   - component: {fileID: 552247250944412582}
   - component: {fileID: 265534189840896192}
-  m_Layer: 0
+  - component: {fileID: 1176552933056517751}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +213,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CameraManager: {fileID: 615640995944681677}
   m_MainHand: {fileID: 5508015268756763318}
+  m_IKMainHand: {fileID: 1639193923690880660}
   m_OffHand: {fileID: 779987025225892959}
+  m_IKOffHand: {fileID: 853870658494668637}
+--- !u!114 &1176552933056517751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4897725242935617697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 229739e33e19ef944b6069d2816668d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Equipment: {fileID: 265534189840896192}
+  m_MainWeapon: {fileID: 1935233770588536798, guid: 03e11705ce3ecc1419baadcb2da1949c, type: 3}
+  m_SecondaryWeapon: {fileID: 1935233770588536798, guid: fc17e61e14349d944bdff026b0e83ad6, type: 3}
+  m_MainWeaponAction: {fileID: 2239213715838788901, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_SecondaryWeaponAction: {fileID: -4693922083642354528, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &5450549719635176382
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,10 +287,18 @@ MonoBehaviour:
     horizontalMouseSensitivity: 0.2
     verticalMouseSensitivity: -0.2
     CameraUpdateLookMode: 1
+    ObjectsToHide:
+    - {fileID: 3750426344793990706}
+    ObjectsToShow:
+    - {fileID: 834316231576070683}
   m_ThirdPersonCameraSettings:
     horizontalMouseSensitivity: 0.2
     verticalMouseSensitivity: 0.2
-    CameraUpdateLookMode: 0
+    CameraUpdateLookMode: 1
+    ObjectsToHide: []
+    ObjectsToShow:
+    - {fileID: 3750426344793990706}
+    - {fileID: 834316231576070683}
   m_CameraSettings:
     maxClampedPitch: 90
     minClampedPitch: -90
@@ -468,6 +496,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8018755333543587946}
   m_SourcePrefab: {fileID: 100100000, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
+--- !u!1 &834316231576070683 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2951836193370446583, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
+  m_PrefabInstance: {fileID: 2549900857530626284}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1655776941007067911 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3862277631971027947, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
@@ -492,6 +525,11 @@ MonoBehaviour:
 --- !u!4 &3176643772026635673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1114260476483171701, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
+  m_PrefabInstance: {fileID: 2549900857530626284}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3750426344793990706 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1688605434684233438, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
   m_PrefabInstance: {fileID: 2549900857530626284}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &7965865738076769230 stripped

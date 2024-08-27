@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -101,9 +102,32 @@ public class CameraManager : MonoBehaviour
             {
                 case MovementMode.FirstPerson:
                     m_CameraSlot.localPosition = Vector3.zero;
+
+                    foreach(GameObject obj in m_FirstPersonCameraSettings.ObjectsToHide)
+                    {
+                        obj.SetActive(false);
+                    }
+
+                    foreach (GameObject obj in m_FirstPersonCameraSettings.ObjectsToShow)
+                    {
+                        obj.SetActive(true);
+                    }
+
                     break;
                 case MovementMode.ThirdPerson:
                     m_CameraSlot.localPosition = m_CameraSettings.thirdPersonView;
+
+
+                    foreach (GameObject obj in m_ThirdPersonCameraSettings.ObjectsToHide)
+                    {
+                        obj.SetActive(false);
+                    }
+
+                    foreach (GameObject obj in m_ThirdPersonCameraSettings.ObjectsToShow)
+                    {
+                        obj.SetActive(true);
+                    }
+
                     break;
             }
         }
@@ -249,6 +273,16 @@ public class ThirdPersonCameraSettings
     /// Whether to use smooth (slerp) rotation or instant rotation.
     /// </summary>
     public CameraLookMode CameraUpdateLookMode = CameraLookMode.Instant;
+
+    /// <summary>
+    /// If using a rigged character you can hide for example their body
+    /// </summary>
+    public List<GameObject> ObjectsToHide;
+
+    /// <summary>
+    /// Add objects here to re enable or show objects when in first person
+    /// </summary>
+    public List<GameObject> ObjectsToShow;
 }
 
 [Serializable]
@@ -268,6 +302,16 @@ public class FirstPersonCameraSettings
     /// Whether to use smooth (slerp) rotation or instant rotation.
     /// </summary>
     public CameraLookMode CameraUpdateLookMode = CameraLookMode.Instant;
+
+    /// <summary>
+    /// If using a rigged character you can hide for example their body
+    /// </summary>
+    public List<GameObject> ObjectsToHide;
+
+    /// <summary>
+    /// Add objects here to re enable or show objects when in third person
+    /// </summary>
+    public List<GameObject> ObjectsToShow;
 }
 
 [Serializable]

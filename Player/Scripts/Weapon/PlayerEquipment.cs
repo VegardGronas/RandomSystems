@@ -9,7 +9,15 @@ public class PlayerEquipment : MonoBehaviour
     Transform m_MainHand;
 
     [SerializeField]
+    Transform m_IKMainHand;
+
+    [SerializeField]
     Transform m_OffHand;
+
+    [SerializeField]
+    Transform m_IKOffHand;
+
+    WeaponRoot m_CurrentWeapon;
 
     public void EquipWeapon(WeaponRoot weapon, WeapnEquipType type)
     {
@@ -39,17 +47,25 @@ public class PlayerEquipment : MonoBehaviour
 
     private void SlotWeapon(WeaponRoot weapon, Transform parent)
     {
+        if(m_CurrentWeapon != null) Destroy(m_CurrentWeapon.gameObject);
+
         weapon = Instantiate(weapon);
 
         weapon.transform.SetParent(parent);
 
-        m_MainHand.localPosition = weapon.RightHandPosition;
-        m_MainHand.rotation = Quaternion.Euler(weapon.RightHandRotation);
+        m_MainHand.localPosition = weapon.HandPositions.RightHandPosition;
+        m_MainHand.localRotation = Quaternion.Euler(weapon.HandPositions.RightHandRotation);
+        m_IKMainHand.localPosition = weapon.HandPositions.IKRightHandPosition;
+        m_IKMainHand.localRotation = Quaternion.Euler(weapon.HandPositions.IKRightHandRotation);
 
-        m_OffHand.localPosition = weapon.LeftHandPosition;
-        m_OffHand.rotation = Quaternion.Euler(weapon.LeftHandRotation);
+        m_OffHand.localPosition = weapon.HandPositions.LeftHandPosition;
+        m_OffHand.localRotation = Quaternion.Euler(weapon.HandPositions.LeftHandRotation);
+        m_IKOffHand.localPosition = weapon.HandPositions.IKLeftHandPosition;
+        m_IKOffHand.localRotation = Quaternion.Euler(weapon.HandPositions.IKLeftHandRotation);
 
         weapon.transform.localPosition = Vector3.zero;
         weapon.Equip(m_CameraManager, m_OffHand);
+
+        m_CurrentWeapon = weapon;
     }
 }
