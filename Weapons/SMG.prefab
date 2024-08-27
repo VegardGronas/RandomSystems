@@ -81,4 +81,4 @@ MonoBehaviour:
   m_SingleBurst: 0
   m_RecoilInProgress: 0
   m_Animator: {fileID: 0}
-  m_HitEffect: {fileID: 4459264964248949938, guid: a87a8ca8f885f9340ae0f71a16573541, type: 3}
+  m_HitEffect: {fileID: 5462422741930792764, guid: f19954f7a78d0694bb6c18c6bd0bae9d, type: 3}

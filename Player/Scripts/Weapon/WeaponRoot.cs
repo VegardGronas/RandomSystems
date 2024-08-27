@@ -79,7 +79,7 @@ public class WeaponRoot : MonoBehaviour
             {
                 if(m_Weapon.HitEffect)
                 {
-                    GameObject hitEffect = Instantiate(m_Weapon.HitEffect, hit.point, Quaternion.Euler(hit.normal));
+                    GameObject hitEffect = Instantiate(m_Weapon.HitEffect, hit.point, Quaternion.LookRotation(hit.normal));
                     Destroy(hitEffect, 2f);
                 }
             }
