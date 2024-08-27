@@ -11,7 +11,7 @@ public class PlayerEquipment : MonoBehaviour
     [SerializeField]
     Transform m_OffHand;
 
-    public void EquipWeapon(Weapon weapon, WeapnEquipType type)
+    public void EquipWeapon(WeaponRoot weapon, WeapnEquipType type)
     {
         switch(type)
         {
@@ -27,23 +27,29 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
-    public void EquipMainHand(Weapon weapon)
+    public void EquipMainHand(WeaponRoot weapon)
     {
         SlotWeapon(weapon, m_MainHand);
     }
 
-    public void EquipOffHand(Weapon weapon)
+    public void EquipOffHand(WeaponRoot weapon)
     {
         SlotWeapon(weapon, m_OffHand);
     }
 
-    private void SlotWeapon(Weapon weapon, Transform parent)
+    private void SlotWeapon(WeaponRoot weapon, Transform parent)
     {
         weapon = Instantiate(weapon);
 
         weapon.transform.SetParent(parent);
-        weapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
 
-        weapon.Equip(m_CameraManager);
+        m_MainHand.localPosition = weapon.RightHandPosition;
+        m_MainHand.rotation = Quaternion.Euler(weapon.RightHandRotation);
+
+        m_OffHand.localPosition = weapon.LeftHandPosition;
+        m_OffHand.rotation = Quaternion.Euler(weapon.LeftHandRotation);
+
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.Equip(m_CameraManager, m_OffHand);
     }
 }
