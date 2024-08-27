@@ -3,12 +3,15 @@ using UnityEngine;
 public class PlayerEquipment : MonoBehaviour
 {
     [SerializeField]
+    CameraManager m_CameraManager;
+
+    [SerializeField]
     Transform m_MainHand;
 
     [SerializeField]
     Transform m_OffHand;
 
-    public void SlotWeapon(Weapon weapon, WeapnEquipType type)
+    public void EquipWeapon(Weapon weapon, WeapnEquipType type)
     {
         switch(type)
         {
@@ -24,9 +27,23 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
+    public void EquipMainHand(Weapon weapon)
+    {
+        SlotWeapon(weapon, m_MainHand);
+    }
+
+    public void EquipOffHand(Weapon weapon)
+    {
+        SlotWeapon(weapon, m_OffHand);
+    }
+
     private void SlotWeapon(Weapon weapon, Transform parent)
     {
+        weapon = Instantiate(weapon);
+
         weapon.transform.SetParent(parent);
         weapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+
+        weapon.Equip(m_CameraManager);
     }
 }
