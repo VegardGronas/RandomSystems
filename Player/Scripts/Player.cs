@@ -270,7 +270,6 @@ public class Player : MonoBehaviour
         Vector2 value = context.ReadValue<Vector2>();
         if (m_CameraManager != null)
         {
-            Debug.Log(value);
             m_CameraManager.YawRotate(value.x);
             m_CameraManager.PitchRotate(value.y);
         }
