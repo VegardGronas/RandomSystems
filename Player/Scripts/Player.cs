@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum PlayerState { Normal, UsingUI }
 /// <summary>
 /// Manages player input and interactions with the camera and movement components.
 /// 
@@ -28,6 +29,15 @@ public class Player : MonoBehaviour
     private CameraManager m_CameraManager;
 
     public CameraManager CameraManager => m_CameraManager;
+
+    /// <summary>
+    /// I use this to disable camera whenver I use the computer or other stuff
+    /// Add more options in the enum if you want to use the feauture
+    /// </summary>
+    [SerializeField]
+    private PlayerState m_PlayerState;
+
+    public PlayerState PlayerState => m_PlayerState;
 
     /// <summary>
     /// This value will be set in start, and stored for later occations.
@@ -267,11 +277,16 @@ public class Player : MonoBehaviour
     /// <param name="context">Input context containing the rotation values (Vector2). Note: Adjust this in the input action asset if needed.</param>
     private void LookRotationInput(InputAction.CallbackContext context)
     {
-        Vector2 value = context.ReadValue<Vector2>();
-        if (m_CameraManager != null)
+        switch(m_PlayerState)
         {
-            m_CameraManager.YawRotate(value.x);
-            m_CameraManager.PitchRotate(value.y);
+            case PlayerState.Normal:
+                Vector2 value = context.ReadValue<Vector2>();
+                if (m_CameraManager != null)
+                {
+                    m_CameraManager.YawRotate(value.x);
+                    m_CameraManager.PitchRotate(value.y);
+                }
+                break;
         }
     }
 
@@ -325,11 +340,42 @@ public class Player : MonoBehaviour
     /// <param name="context">Input context containing the Vector2 value for movement input.</param>
     private void MoveInput(InputAction.CallbackContext context)
     {
+        if (m_PlayerState != PlayerState.Normal) ResetPlayerState();
+
         Vector2 inputValue = context.ReadValue<Vector2>();
         if (m_MovementManager != null)
         {
             m_MovementManager.SetMoveInputVector(inputValue);
         }
+    }
+
+    public void UseUiObjects(Transform cameraTargetPosition)
+    {
+        m_PlayerState = PlayerState.UsingUI;
+        m_CameraManager.Camera.transform.position = cameraTargetPosition.position;
+        m_CameraManager.Camera.transform.rotation = cameraTargetPosition.rotation;
+
+        SetCursor(CursorLockMode.None);
+    }
+
+    public void UseUiObjects(Transform cameraTargetPosition, bool useOrtographic, float ortgoSize)
+    {
+        m_PlayerState = PlayerState.UsingUI;
+        m_CameraManager.Camera.transform.position = cameraTargetPosition.position;
+        m_CameraManager.Camera.transform.rotation = cameraTargetPosition.rotation;
+        m_CameraManager.Camera.orthographic = useOrtographic;
+        m_CameraManager.Camera.orthographicSize = ortgoSize;
+
+        SetCursor(CursorLockMode.None);
+    }
+
+    public void ResetPlayerState()
+    {
+        m_PlayerState = PlayerState.Normal;
+        m_CameraManager.SlotCamera();
+        m_CameraManager.Camera.orthographic = false;
+
+        SetCursorToDefault();
     }
 }
 

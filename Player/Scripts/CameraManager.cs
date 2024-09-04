@@ -88,7 +88,7 @@ public class CameraManager : MonoBehaviour
         UpdateCameraLookMode();
     }
 
-    private void SlotCamera()
+    public void SlotCamera()
     {
         if (m_CameraSlot != null)
         {

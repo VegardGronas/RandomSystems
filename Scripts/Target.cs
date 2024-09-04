@@ -8,5 +8,11 @@ public class Target : MonoBehaviour
         OnHit(damage);
     }
 
+    public void Use()
+    {
+        OnUse();
+    }
+
     protected virtual void OnHit(float damage) { }
+    protected virtual void OnUse() { }
 }
