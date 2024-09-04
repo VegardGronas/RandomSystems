@@ -71,9 +71,9 @@ public class WeaponRoot : MonoBehaviour
 
         if(Physics.Raycast(ray, out hit, Mathf.Infinity, m_LayerMask))
         {
-            if(hit.collider.TryGetComponent<Enemy>(out Enemy enemy))
+            if(hit.collider.TryGetComponent<Target>(out Target target))
             {
-                Destroy(hit.collider.gameObject);
+                target.Hit(m_Weapon.Damage);
             }
             else
             {

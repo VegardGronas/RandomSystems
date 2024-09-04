@@ -3,6 +3,11 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [SerializeField]
+    float m_Damage;
+
+    public float Damage { get { return m_Damage; } }
+
+    [SerializeField]
     bool m_Reloading = false;
 
     public bool Reloading => m_Reloading;

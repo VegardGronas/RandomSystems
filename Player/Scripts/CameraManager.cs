@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public enum CameraLookMode { Slerp, Instant }
 public class CameraManager : MonoBehaviour
@@ -58,6 +59,8 @@ public class CameraManager : MonoBehaviour
 
     public CameraSettings CameraSettings => m_CameraSettings;
 
+    private float m_CurrentPitchInputValue;
+    private float m_CurrentYawInputValue;
     private float m_CurrentPitch;
     private float m_CurrentYaw;
 
@@ -103,7 +106,7 @@ public class CameraManager : MonoBehaviour
                 case MovementMode.FirstPerson:
                     m_CameraSlot.localPosition = Vector3.zero;
 
-                    foreach(GameObject obj in m_FirstPersonCameraSettings.ObjectsToHide)
+                    foreach (GameObject obj in m_FirstPersonCameraSettings.ObjectsToHide)
                     {
                         obj.SetActive(false);
                     }
@@ -140,41 +143,17 @@ public class CameraManager : MonoBehaviour
             YawRotate(yaw);
         }
 
-        if (Mathf.Abs(pitch) > 0)
-        {
-            PitchRotate(pitch);
-        }
+        PitchRotate(pitch);
     }
 
     public void YawRotate(float value)
     {
-        switch (m_MovementManager.MovementSettings.MovementMode)
-        {
-            case MovementMode.FirstPerson:
-                m_CurrentYaw += value * m_FirstPersonCameraSettings.horizontalMouseSensitivity;
-                break;
-            case MovementMode.ThirdPerson:
-                m_CurrentYaw += value * m_ThirdPersonCameraSettings.horizontalMouseSensitivity;
-                break;
-        }
-
-        m_YawTargetRotation = new Vector3(0, m_CurrentYaw, 0);
+        m_CurrentYawInputValue = value;
     }
 
     public void PitchRotate(float value)
     {
-        switch (m_MovementManager.MovementSettings.MovementMode)
-        {
-            case MovementMode.FirstPerson:
-                m_CurrentPitch += value * m_FirstPersonCameraSettings.verticalMouseSensitivity;
-                break;
-            case MovementMode.ThirdPerson:
-                m_CurrentPitch += value * m_ThirdPersonCameraSettings.verticalMouseSensitivity;
-                break;
-        }
-
-        m_CurrentPitch = Mathf.Clamp(m_CurrentPitch, m_CameraSettings.minClampedPitch, m_CameraSettings.maxClampedPitch);
-        m_PitchTargetRotation = new Vector3(m_CurrentPitch, 0, 0);
+        m_CurrentPitchInputValue = value;
     }
 
     public void SetLocation(Vector3 newLocation)
@@ -205,6 +184,8 @@ public class CameraManager : MonoBehaviour
             UpdateCameraLookMode();
         }
 
+        UpdateRotation();
+
         // Apply the rotation based on the cached camera look mode
         switch (currentCameraLookMode)
         {
@@ -217,9 +198,29 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    private void UpdateRotation()
+    {
+        switch (m_MovementManager.MovementSettings.MovementMode)
+        {
+            case MovementMode.FirstPerson:
+                m_CurrentYaw += m_CurrentYawInputValue * m_FirstPersonCameraSettings.horizontalMouseSensitivity;
+                m_CurrentPitch += m_CurrentPitchInputValue * m_FirstPersonCameraSettings.verticalMouseSensitivity;
+                break;
+            case MovementMode.ThirdPerson:
+                m_CurrentYaw += m_CurrentYawInputValue * m_ThirdPersonCameraSettings.horizontalMouseSensitivity;
+                m_CurrentPitch += m_CurrentPitchInputValue * m_ThirdPersonCameraSettings.verticalMouseSensitivity;
+                break;
+        }
+
+        m_CurrentPitch = Mathf.Clamp(m_CurrentPitch, m_CameraSettings.minClampedPitch, m_CameraSettings.maxClampedPitch);
+        m_PitchTargetRotation = new Vector3(m_CurrentPitch, 0, 0);
+
+        m_YawTargetRotation = new Vector3(0, m_CurrentYaw, 0);
+    }
+
     private bool HasMovementModeChanged()
     {
-        if(currentMovementMode != m_MovementManager.MovementSettings.MovementMode)
+        if (currentMovementMode != m_MovementManager.MovementSettings.MovementMode)
         {
             return true;
         }
@@ -259,7 +260,7 @@ public class CameraManager : MonoBehaviour
 [Serializable]
 public class ThirdPersonCameraSettings
 {
-        /// <summary>
+    /// <summary>
     /// Sensitivity of the camera's horizontal movement based on mouse input.
     /// </summary>
     public float horizontalMouseSensitivity = .5f;

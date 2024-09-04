@@ -163,22 +163,28 @@ public class Player : MonoBehaviour
         {
             // Sub to rotation on the camera
             if (m_PlayerInputActions.RotateInputAction)
+            {
                 m_PlayerInputActions.RotateInputAction.action.performed += LookRotationInput;
+                m_PlayerInputActions.RotateInputAction.action.canceled += LookRotationInput;
+            }
 
             // Sub to input to change movement modes
-            if(m_PlayerInputActions.SetMovementModeAction)
+            if (m_PlayerInputActions.SetMovementModeAction)
                 m_PlayerInputActions.SetMovementModeAction.action.performed += SetMovementModeInput;
 
             // Sub to input to set movement direction
-            if(m_PlayerInputActions.MoveInputAction)
+            if (m_PlayerInputActions.MoveInputAction)
             {
                 m_PlayerInputActions.MoveInputAction.action.performed += MoveInput;
                 m_PlayerInputActions.MoveInputAction.action.canceled += MoveInput;
             }
 
             // Sub to input to pause the game
-            if(m_PlayerInputActions.PauseAction)
+            if (m_PlayerInputActions.PauseAction)
                 m_PlayerInputActions.PauseAction.action.performed += PauseInput;
+
+            if (m_PlayerInputActions.JumpAction)
+                m_PlayerInputActions.JumpAction.action.performed += Jump;
         }
     }
 
@@ -191,7 +197,10 @@ public class Player : MonoBehaviour
         {
             // Unsub to rotation on the camera
             if (m_PlayerInputActions.RotateInputAction)
+            {
                 m_PlayerInputActions.RotateInputAction.action.performed -= LookRotationInput;
+                m_PlayerInputActions.RotateInputAction.action.canceled -= LookRotationInput;
+            }
 
             // Unsub to input to change movement modes
             if (m_PlayerInputActions.SetMovementModeAction)
@@ -203,6 +212,9 @@ public class Player : MonoBehaviour
                 m_PlayerInputActions.MoveInputAction.action.performed -= MoveInput;
                 m_PlayerInputActions.MoveInputAction.action.canceled -= MoveInput;
             }
+
+            if (m_PlayerInputActions.JumpAction)
+                m_PlayerInputActions.JumpAction.action.performed -= Jump;
         }
     }
 
@@ -258,8 +270,19 @@ public class Player : MonoBehaviour
         Vector2 value = context.ReadValue<Vector2>();
         if (m_CameraManager != null)
         {
-            m_CameraManager.Rotate(value.x, value.y);
+            Debug.Log(value);
+            m_CameraManager.YawRotate(value.x);
+            m_CameraManager.PitchRotate(value.y);
         }
+    }
+
+    /// <summary>
+    /// Sends the input action to the movement component for jumping
+    /// </summary>
+    /// <param name="context">The jump does not use the context value</param>
+    private void Jump(InputAction.CallbackContext context)
+    {
+        m_MovementManager.Jump();
     }
 
     /// <summary>
@@ -366,4 +389,12 @@ public class PlayerInputActions
     /// Reference to the input action for changing the movement mode.
     /// </summary>
     public InputActionReference PauseAction => m_PuaseAction;
+
+    /// <summary>
+    /// Reference to the input action for jumping.
+    /// </summary>
+    [SerializeField]
+    InputActionReference m_JumpAction;
+
+    public InputActionReference JumpAction => m_JumpAction;
 }
